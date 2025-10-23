@@ -48,5 +48,5 @@ jobs:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: html5
           ITCH_GAME: coda-shmup
-          ITCH_USER: surmoi
+          ITCH_USER: yaahtz
           PACKAGE: dist/
