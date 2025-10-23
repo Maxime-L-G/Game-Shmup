@@ -6,6 +6,7 @@ import Player from "../entities/Player.ts";
 import GroupUtils from "../utils/GroupUtils.ts";
 import GameConstants from "../GameConstants.ts";
 import RegistryConstants from "../RegistryConstants.ts";
+import Power from "../entities/Power.ts";
 
 export default class EntityManager extends Plugins.ScenePlugin {
     public static readonly PLUGIN_KEY: string = 'EntityManager';
@@ -25,6 +26,7 @@ export default class EntityManager extends Plugins.ScenePlugin {
     private _playerBullets: Physics.Arcade.Group;
     private _enemies: Physics.Arcade.Group;
     private _enemyBullets: Physics.Arcade.Group;
+    private _powerHeal: Physics.Arcade.Group;
 
     constructor(scene: Scene, pluginManager: Plugins.PluginManager) {
         super(scene, pluginManager, EntityManager.PLUGIN_KEY);
@@ -78,6 +80,29 @@ export default class EntityManager extends Plugins.ScenePlugin {
         return this._enemies;
     }
 
+    public initPowerHeal(): Physics.Arcade.Group {
+        this._powerHeal = this.scene!.physics.add.group({
+            classType: Power,
+            runChildUpdate: true,
+            defaultKey: 'sprites',
+            defaultFrame: 'pill_red.png',
+            createCallback: (obj: Phaser.GameObjects.GameObject) => {
+                (obj as Power).init();
+            }
+        });
+
+        GroupUtils.populate(4, this._powerHeal);
+
+        this.scene!.time.addEvent({
+            delay: 10000,
+            callback: this.spawnPowerHeal,
+            callbackScope: this,
+            loop: true
+        });
+
+        return this._powerHeal;
+}
+
     public initGroupCollisions() {
         this.scene!.physics.add.overlap(this._playerBullets, this._enemies, (bullet, enemy) => {
             this.scene!.registry.inc(RegistryConstants.Keys.PLAYER_SCORE);
@@ -107,6 +132,15 @@ export default class EntityManager extends Plugins.ScenePlugin {
             return true;
         });
 
+        this.scene!.physics.add.overlap(this._player, this._powerHeal, (player, power) => {
+
+            (player as Player).getComponent(Health)?.heal(1);
+            (power as Power).disable();
+
+            this.scene?.cameras.main.flash(100, 100);
+
+        });
+
         console.log("[EntityManager] Group collisions initialized");
     }
 
@@ -125,5 +159,22 @@ export default class EntityManager extends Plugins.ScenePlugin {
         this.game!.events.emit(GameConstants.Events.ENEMY_SPAWNED_EVENT, enemy);
 
         console.log("[EntityManager] Enemy spawned");
+    }
+
+    private spawnPowerHeal() {
+        if (this._powerHeal.countActive(true) >= 1) {
+            return;
+        }
+
+        const powerHeal = this._powerHeal.get() as Power;
+        if (!powerHeal) {
+            return;
+        }
+
+        powerHeal.enable(Phaser.Math.Between(64, this.scene!.cameras.main.width - 64), 0);
+
+        this.game!.events.emit(GameConstants.Events.POWER_HEAL_SPAWNED_EVENT, powerHeal);
+
+        console.log("[EntityManager] Power heal spawned");
     }
 }

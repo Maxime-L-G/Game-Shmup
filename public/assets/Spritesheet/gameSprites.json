@@ -5,7 +5,7 @@
 			"format": "RGBA8888",
 			"size": {
 				"w": 166,
-				"h": 400
+				"h": 473
 			},
 			"scale": 1,
 			"frames": [
@@ -73,6 +73,27 @@
 					}
 				},
 				{
+					"filename": "enemyBlack1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 84,
+						"h": 93
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 84,
+						"h": 93
+					},
+					"frame": {
+						"x": 0,
+						"y": 309,
+						"w": 84,
+						"h": 93
+					}
+				},
+				{
 					"filename": "ufoRed-shoot0.png",
 					"rotated": false,
 					"trimmed": false,
@@ -87,8 +108,8 @@
 						"h": 91
 					},
 					"frame": {
-						"x": 0,
-						"y": 309,
+						"x": 75,
+						"y": 0,
 						"w": 91,
 						"h": 91
 					}
@@ -109,7 +130,7 @@
 					},
 					"frame": {
 						"x": 75,
-						"y": 0,
+						"y": 91,
 						"w": 91,
 						"h": 91
 					}
@@ -130,9 +151,30 @@
 					},
 					"frame": {
 						"x": 75,
-						"y": 91,
+						"y": 182,
 						"w": 91,
 						"h": 91
+					}
+				},
+				{
+					"filename": "bolt_gold.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 19,
+						"h": 30
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 19,
+						"h": 30
+					},
+					"frame": {
+						"x": 75,
+						"y": 273,
+						"w": 19,
+						"h": 30
 					}
 				},
 				{
@@ -150,8 +192,8 @@
 						"h": 26
 					},
 					"frame": {
-						"x": 75,
-						"y": 182,
+						"x": 0,
+						"y": 402,
 						"w": 33,
 						"h": 26
 					}
@@ -171,52 +213,31 @@
 						"h": 24
 					},
 					"frame": {
-						"x": 75,
-						"y": 208,
+						"x": 0,
+						"y": 428,
 						"w": 25,
 						"h": 24
 					}
 				},
 				{
-					"filename": "star2.png",
+					"filename": "pill_red.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 25,
-						"h": 24
+						"w": 22,
+						"h": 21
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 25,
-						"h": 24
+						"w": 22,
+						"h": 21
 					},
 					"frame": {
-						"x": 75,
-						"y": 232,
-						"w": 25,
-						"h": 24
-					}
-				},
-				{
-					"filename": "star3.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 24,
-						"h": 24
-					},
-					"spriteSourceSize": {
 						"x": 0,
-						"y": 0,
-						"w": 24,
-						"h": 24
-					},
-					"frame": {
-						"x": 75,
-						"y": 256,
-						"w": 24,
-						"h": 24
+						"y": 452,
+						"w": 22,
+						"h": 21
 					}
 				}
 			]
