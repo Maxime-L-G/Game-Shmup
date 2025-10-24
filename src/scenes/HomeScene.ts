@@ -14,6 +14,7 @@ export default class HomeScene extends Phaser.Scene {
     private arrowRight: GameObjects.Text;
     private pillRed: GameObjects.Sprite;
     private pillBlue: GameObjects.Sprite;
+    private debugLine: GameObjects.Line;
 
 
     constructor() {
@@ -118,7 +119,7 @@ export default class HomeScene extends Phaser.Scene {
 
         this.input.keyboard?.once("keydown-SPACE", () => this.startWithAnimation());
 
-        this.arrowLeft = this.add.text(this.scale.width / 2 - 110, this.scale.height * 0.75, "←",
+        this.arrowLeft = this.add.text(this.scale.width / 2 - 115, this.scale.height * 0.75, "←",
             {
                 fontSize: "64px",
                 color: "#ffffff",
@@ -126,7 +127,7 @@ export default class HomeScene extends Phaser.Scene {
             }
         );
 
-        this.arrowRight = this.add.text(this.scale.width / 2 + 50, this.scale.height * 0.75, "→",
+        this.arrowRight = this.add.text(this.scale.width / 2 + 43, this.scale.height * 0.75, "→",
             {
                 fontSize: "64px",
                 color: "#ffffff",
@@ -181,7 +182,6 @@ export default class HomeScene extends Phaser.Scene {
                 fontFamily: "future"
             }
         ).setOrigin(0.5);
-
 
         console.log("HomeScene created");
     }
