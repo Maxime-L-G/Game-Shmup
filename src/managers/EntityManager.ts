@@ -7,6 +7,7 @@ import GroupUtils from "../utils/GroupUtils.ts";
 import GameConstants from "../GameConstants.ts";
 import RegistryConstants from "../RegistryConstants.ts";
 import Power from "../entities/Power.ts";
+import {HealEffect, SpeedBoostEffect} from "../components/BoostEffect.ts";
 
 export default class EntityManager extends Plugins.ScenePlugin {
     public static readonly PLUGIN_KEY: string = 'EntityManager';
@@ -26,7 +27,7 @@ export default class EntityManager extends Plugins.ScenePlugin {
     private _playerBullets: Physics.Arcade.Group;
     private _enemies: Physics.Arcade.Group;
     private _enemyBullets: Physics.Arcade.Group;
-    private _powerHeal: Physics.Arcade.Group;
+    private _powerEffects: Physics.Arcade.Group;
 
     constructor(scene: Scene, pluginManager: Plugins.PluginManager) {
         super(scene, pluginManager, EntityManager.PLUGIN_KEY);
@@ -80,27 +81,32 @@ export default class EntityManager extends Plugins.ScenePlugin {
         return this._enemies;
     }
 
-    public initPowerHeal(): Physics.Arcade.Group {
-        this._powerHeal = this.scene!.physics.add.group({
+    public initPowers(): Physics.Arcade.Group {
+        this._powerEffects = this.scene!.physics.add.group({
             classType: Power,
             runChildUpdate: true,
             defaultKey: 'sprites',
-            defaultFrame: 'pill_red.png',
             createCallback: (obj: Phaser.GameObjects.GameObject) => {
                 (obj as Power).init();
             }
         });
 
-        GroupUtils.populate(4, this._powerHeal);
+        GroupUtils.populate(4, this._powerEffects);
 
         this.scene!.time.addEvent({
             delay: 10000,
-            callback: this.spawnPowerHeal,
+            callback: this.spawnHeal,
             callbackScope: this,
             loop: true
         });
+        this.scene!.time.addEvent({
+            delay: 15000,
+            callback: this.spawnSpeedBoost,
+            callbackScope: this,
+            loop: true
+        })
 
-        return this._powerHeal;
+        return this._powerEffects;
 }
 
     public initGroupCollisions() {
@@ -132,10 +138,11 @@ export default class EntityManager extends Plugins.ScenePlugin {
             return true;
         });
 
-        this.scene!.physics.add.overlap(this._player, this._powerHeal, (player, power) => {
-
-            (player as Player).getComponent(Health)?.heal(1);
-            (power as Power).disable();
+        this.scene!.physics.add.overlap(this._player, this._powerEffects, (player, power) => {
+            const powerEntity = power as Power;
+            const playerEntity = player as Player;
+            
+            powerEntity.applyBoostEffect(playerEntity,);
 
             this.scene?.cameras.main.flash(100, 100);
 
@@ -161,20 +168,39 @@ export default class EntityManager extends Plugins.ScenePlugin {
         console.log("[EntityManager] Enemy spawned");
     }
 
-    private spawnPowerHeal() {
-        if (this._powerHeal.countActive(true) >= 1) {
+    private spawnHeal() {
+        if (this._powerEffects.countActive(true) >= 1) {
             return;
         }
 
-        const powerHeal = this._powerHeal.get() as Power;
-        if (!powerHeal) {
+        const power = this._powerEffects.get() as Power;
+        if (!power) {
             return;
         }
 
-        powerHeal.enable(Phaser.Math.Between(64, this.scene!.cameras.main.width - 64), 0);
+        this.game!.events.emit(GameConstants.Events.POWER_SPAWNED_EVENT, power);
+        power.setEffect(new HealEffect(1));
 
-        this.game!.events.emit(GameConstants.Events.POWER_HEAL_SPAWNED_EVENT, powerHeal);
+        power.enable(Phaser.Math.Between(64, this.scene!.cameras.main.width - 64), 0);
 
         console.log("[EntityManager] Power heal spawned");
+    }
+
+    private spawnSpeedBoost() {
+        if (this._powerEffects.countActive(true) >= 2) {
+            return;
+        }
+
+        const power = this._powerEffects.get() as Power;
+        if (!power) {
+            return;
+        }
+
+        this.game!.events.emit(GameConstants.Events.POWER_SPAWNED_EVENT, power);
+
+        power.setEffect(new SpeedBoostEffect(1.6, 7000));
+        power.enable(Phaser.Math.Between(64, this.scene!.cameras.main.width - 64), 0);
+
+        console.log("[EntityManager] Power speed boost spawned");
     }
 }
