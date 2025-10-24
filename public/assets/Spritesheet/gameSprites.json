@@ -4,8 +4,8 @@
 			"image": "gameSprites",
 			"format": "RGBA8888",
 			"size": {
-				"w": 166,
-				"h": 473
+				"w": 250,
+				"h": 405
 			},
 			"scale": 1,
 			"frames": [
@@ -73,6 +73,27 @@
 					}
 				},
 				{
+					"filename": "meteorBrown_big4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 98,
+						"h": 96
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 98,
+						"h": 96
+					},
+					"frame": {
+						"x": 0,
+						"y": 309,
+						"w": 98,
+						"h": 96
+					}
+				},
+				{
 					"filename": "enemyBlack1.png",
 					"rotated": false,
 					"trimmed": false,
@@ -87,8 +108,8 @@
 						"h": 93
 					},
 					"frame": {
-						"x": 0,
-						"y": 309,
+						"x": 75,
+						"y": 0,
 						"w": 84,
 						"h": 93
 					}
@@ -109,7 +130,7 @@
 					},
 					"frame": {
 						"x": 75,
-						"y": 0,
+						"y": 93,
 						"w": 91,
 						"h": 91
 					}
@@ -129,8 +150,8 @@
 						"h": 91
 					},
 					"frame": {
-						"x": 75,
-						"y": 91,
+						"x": 159,
+						"y": 0,
 						"w": 91,
 						"h": 91
 					}
@@ -151,7 +172,7 @@
 					},
 					"frame": {
 						"x": 75,
-						"y": 182,
+						"y": 184,
 						"w": 91,
 						"h": 91
 					}
@@ -172,7 +193,7 @@
 					},
 					"frame": {
 						"x": 75,
-						"y": 273,
+						"y": 275,
 						"w": 19,
 						"h": 30
 					}
@@ -192,10 +213,31 @@
 						"h": 26
 					},
 					"frame": {
-						"x": 0,
-						"y": 402,
+						"x": 94,
+						"y": 275,
 						"w": 33,
 						"h": 26
+					}
+				},
+				{
+					"filename": "speed.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 108,
+						"h": 7
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 108,
+						"h": 7
+					},
+					"frame": {
+						"x": 94,
+						"y": 301,
+						"w": 108,
+						"h": 7
 					}
 				},
 				{
@@ -213,10 +255,52 @@
 						"h": 24
 					},
 					"frame": {
-						"x": 0,
-						"y": 428,
+						"x": 127,
+						"y": 275,
 						"w": 25,
 						"h": 24
+					}
+				},
+				{
+					"filename": "pill_blue.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 22,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 22,
+						"h": 21
+					},
+					"frame": {
+						"x": 152,
+						"y": 275,
+						"w": 22,
+						"h": 21
+					}
+				},
+				{
+					"filename": "pill_green.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 22,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 22,
+						"h": 21
+					},
+					"frame": {
+						"x": 174,
+						"y": 275,
+						"w": 22,
+						"h": 21
 					}
 				},
 				{
@@ -234,10 +318,73 @@
 						"h": 21
 					},
 					"frame": {
-						"x": 0,
-						"y": 452,
+						"x": 166,
+						"y": 91,
 						"w": 22,
 						"h": 21
+					}
+				},
+				{
+					"filename": "pill_yellow.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 22,
+						"h": 21
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 22,
+						"h": 21
+					},
+					"frame": {
+						"x": 166,
+						"y": 112,
+						"w": 22,
+						"h": 21
+					}
+				},
+				{
+					"filename": "laserBlue16.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 54,
+						"h": 13
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 54,
+						"h": 13
+					},
+					"frame": {
+						"x": 166,
+						"y": 133,
+						"w": 54,
+						"h": 13
+					}
+				},
+				{
+					"filename": "laserRed03.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 37,
+						"h": 9
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 37,
+						"h": 9
+					},
+					"frame": {
+						"x": 188,
+						"y": 91,
+						"w": 37,
+						"h": 9
 					}
 				}
 			]

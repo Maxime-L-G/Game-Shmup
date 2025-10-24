@@ -35,7 +35,7 @@ export default class MainGameScene extends Scene {
         const player = this.entityManager.initAndSpawnPlayer();
         player.getComponent(Health)?.once(Health.DEATH_EVENT, this.endGame, this);
         this.entityManager.initEnemies();
-        this.entityManager.initPowerHeal();
+        this.entityManager.initPowers();
         this.entityManager.initGroupCollisions();
 
         if (this.input.keyboard) {
