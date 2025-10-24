@@ -12,9 +12,14 @@ export default class MainGameScene extends Scene {
     private saveManager: SaveManager;
     private entityManager: EntityManager;
     private bgSpeed: number = 1;
+    private entryFromHome = false;
 
     constructor() {
         super(GameConstants.SceneKeys.MAIN_GAME);
+    }
+
+    init(data: {entry?: string}) {
+        this.entryFromHome = data?.entry === 'fromHome';
     }
 
     // noinspection JSUnusedGlobalSymbols
@@ -35,6 +40,30 @@ export default class MainGameScene extends Scene {
 
         const player = this.entityManager.initAndSpawnPlayer();
         player.getComponent(Health)?.once(Health.DEATH_EVENT, this.endGame, this);
+
+        if (this.entryFromHome) {
+            const targetY = player.y;
+            player.y = this.cameras.main.height + player.displayHeight;
+
+            (player as any).showSpeedEffect?.(700);
+
+            this.tweens.add({
+                targets: this,
+                bgSpeed: 2,
+                duration: 400,
+                ease: 'Sine.easeOut',
+                yoyo: true,
+                hold: 120
+            });
+
+            this.tweens.add({
+                targets: player,
+                y: targetY,
+                duration: 650,
+                ease: 'Sine.easeOut'
+            })
+        }
+
         this.entityManager.initEnemies();
         this.entityManager.initPowers();
         this.entityManager.initGroupCollisions();
