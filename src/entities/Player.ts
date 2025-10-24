@@ -19,6 +19,9 @@ export default class Player extends Entity {
     private _playerShipData: PlayerShipData;
     private _rateOfFire: number;
     private _lastShotTime: number;
+    private _leftSpeedEffect: Phaser.GameObjects.Sprite;
+    private _rightSpeedEffect: Phaser.GameObjects.Sprite;
+    private _speedEffectTween: Phaser.Tweens.Tween;
 
     constructor(scene: Scene, x: number, y: number) {
         super(scene, x, y, 'sprites');
@@ -51,7 +54,50 @@ export default class Player extends Entity {
                 this.arcadeBody.setEnable(true);
             });
         });
+
+        this._leftSpeedEffect = this.scene.add.sprite(this.x, this.y, 'sprites', 'speed.png');
+        this._rightSpeedEffect = this.scene.add.sprite(this.x, this.y, 'sprites', 'speed.png');
+
+        for (const fx of [this._leftSpeedEffect, this._rightSpeedEffect]) {
+            fx.setVisible(false);
+            fx.setOrigin(0.5, 1.2);
+            fx.setBlendMode(Phaser.BlendModes.ADD);
+            fx.setAlpha(0.6);
+            fx.setDepth(99);
+        }
     }
+
+    public showSpeedEffect(duration?: number) {
+        const effects = [this._leftSpeedEffect, this._rightSpeedEffect];
+        for (const fx of effects) {
+            fx.setVisible(true);
+        }
+
+        this._speedEffectTween?.remove();
+        this._speedEffectTween = this.scene.tweens.add({
+            targets: effects,
+            alpha: { from: 0.5, to: 1 },
+            scaleY: { from: 0.95, to: 1.08 },
+            duration: 160,
+            yoyo: true,
+            repeat: -1
+        });
+
+        if (duration && duration > 0) {
+            this.scene.time.delayedCall(duration, () => this.hideSpeedEffect());
+        }
+    }
+
+    public hideSpeedEffect() {
+        const effects = [this._leftSpeedEffect, this._rightSpeedEffect];
+        this._speedEffectTween?.remove();
+        for (const fx of effects) {
+            fx.setVisible(false);
+            fx.setAlpha(0.85);
+            fx.setScale(1);
+        }
+    }
+
 
     public selectPlayerShip(playerShipDataId: number) {
         const playerShipsData = this.scene.cache.json.get('playerShips') as PlayerShipsData;
@@ -92,6 +138,29 @@ export default class Player extends Entity {
 
                 this._lastShotTime = timeSinceLaunch;
             }
+        }
+
+        if (this._leftSpeedEffect?.visible) {
+            const a = Phaser.Math.DegToRad(this.angle);
+
+            const back = this.displayWidth * 0.35;
+            const bx = this.x - Math.cos(a) * back;
+            const by = this.y - Math.sin(a) * back;
+
+            const baseSide = this.displayWidth * 0.45;
+
+            const sx = Math.cos(a + Math.PI / 2) * baseSide;
+            const sy = Math.sin(a + Math.PI / 2) * baseSide;
+
+            const extraRight = 10;
+            const srx = Math.cos(a + Math.PI / 2) * (baseSide + extraRight);
+            const sry = Math.sin(a + Math.PI / 2) * (baseSide + extraRight);
+
+            this._leftSpeedEffect.setPosition(bx - sx, by - sy);
+            this._rightSpeedEffect.setPosition(bx + srx, by + sry);
+
+            this._leftSpeedEffect.setAngle(this.angle);
+            this._rightSpeedEffect.setAngle(this.angle);
         }
     }
 }

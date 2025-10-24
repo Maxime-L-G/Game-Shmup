@@ -11,6 +11,7 @@ export default class MainGameScene extends Scene {
     private planet: GameObjects.Image;
     private saveManager: SaveManager;
     private entityManager: EntityManager;
+    private bgSpeed: number = 1;
 
     constructor() {
         super(GameConstants.SceneKeys.MAIN_GAME);
@@ -61,7 +62,7 @@ export default class MainGameScene extends Scene {
     }
 
     update(_timeSinceLaunch: number, deltaTime: number) {
-        this.bg.tilePositionY -= 0.1 * deltaTime;
+        this.bg.tilePositionY -= 0.1 * deltaTime * this.bgSpeed;
         this.planet.y += 0.40 * deltaTime;
     }
 }
