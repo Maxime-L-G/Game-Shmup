@@ -26,8 +26,25 @@ export class SpeedBoostEffect implements IBoostEffect {
       const currentSpeed = movement.speed;
       movement.setSpeed(currentSpeed * this.multiplier);
 
+      const scene = player.scene as any;
+      scene.tweens.add({
+        targets: scene,
+        bgSpeed: 5,
+        duration: 2000,
+        ease: 'Sine.easeOut',
+      })
+
+      player.showSpeedEffect(this.duration);
+
       player.scene.time.delayedCall(this.duration, () => {
       movement.setSpeed(currentSpeed);
+      player.hideSpeedEffect();
+      scene.tweens.add({
+        targets: scene,
+        bgSpeed: 1,
+        duration: 1000,
+        ease: 'Sine.easeIn',
+      })
     })
     }
 
