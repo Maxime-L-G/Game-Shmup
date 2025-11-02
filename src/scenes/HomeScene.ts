@@ -14,7 +14,7 @@ export default class HomeScene extends Phaser.Scene {
     private arrowRight: GameObjects.Text;
     private pillRed: GameObjects.Sprite;
     private pillBlue: GameObjects.Sprite;
-    private debugLine: GameObjects.Line;
+    // private debugLine: GameObjects.Line;
 
 
     constructor() {
@@ -53,6 +53,7 @@ export default class HomeScene extends Phaser.Scene {
         this.load.json('playerShips', 'Data/playerShips.json');
         this.load.audio('sfx_laser1', 'Sounds/sfx_laser1.ogg');
         this.load.audio('sfx_laser2', 'Sounds/sfx_laser2.ogg');
+        this.load.json('enemies', 'Data/enemies.json');        
     }
 
     create() {

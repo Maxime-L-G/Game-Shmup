@@ -1,0 +1,17 @@
+{
+  "sineSpreadEnemy": {
+    "texture": "enemyBlack1.png",
+    "hp": 3,
+    "speed": 90,
+    "movement": { "amplitude": 120, "frequency": 2 },
+    "weapon": {
+      "type": "spread",
+      "count": 5,
+      "angleStart": -25,
+      "angleEnd": 25,
+      "rateOfFire": 1.2,
+      "bulletSpeed": 300,
+      "bulletTint": 15920383
+    }
+  }
+}
