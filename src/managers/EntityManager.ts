@@ -8,6 +8,7 @@ import GameConstants from "../GameConstants.ts";
 import RegistryConstants from "../RegistryConstants.ts";
 import Power from "../entities/Power.ts";
 import {HealEffect, SpeedBoostEffect} from "../components/BoostEffect.ts";
+import SineSpreadEnemy from "../entities/SineSpreadEnemy.ts";
 
 export default class EntityManager extends Plugins.ScenePlugin {
     public static readonly PLUGIN_KEY: string = 'EntityManager';
@@ -28,6 +29,9 @@ export default class EntityManager extends Plugins.ScenePlugin {
     private _enemies: Physics.Arcade.Group;
     private _enemyBullets: Physics.Arcade.Group;
     private _powerEffects: Physics.Arcade.Group;
+    private _lastSineSpawn = 0;
+    private readonly SINE_COOLDOWN = 8000;
+
 
     constructor(scene: Scene, pluginManager: Plugins.PluginManager) {
         super(scene, pluginManager, EntityManager.PLUGIN_KEY);
@@ -59,14 +63,20 @@ export default class EntityManager extends Plugins.ScenePlugin {
         this._enemyBullets = this.scene!.physics.add.group(this.bulletGroupConfig);
         GroupUtils.populate(256, this._enemyBullets);
 
+        (this.scene as any).enemyBullets = this._enemyBullets;
+
         this._enemies = this.scene!.physics.add.group({
             classType: Enemy,
             defaultKey: 'sprites',
             defaultFrame: 'ufoRed.png',
-            createCallback: (enemy) => {
-                (enemy as Enemy).init(this._enemyBullets);
+            createCallback: (obj) => {
+                if (obj instanceof Enemy) {
+                    (obj as Enemy).init(this._enemyBullets);
+                } else {
+                }
             }
         });
+
 
         // Spawn enemies indefinitely
         this.scene!.time.addEvent({
@@ -114,7 +124,10 @@ export default class EntityManager extends Plugins.ScenePlugin {
             this.scene!.registry.inc(RegistryConstants.Keys.PLAYER_SCORE);
 
             (bullet as Bullet).disable();
-            (enemy as Enemy).getComponent(Health)?.damage((bullet as Bullet).damage);
+            const enemyHealth = (enemy as any).getComponent?.(Health);
+            if (enemyHealth) {
+                enemyHealth.damage((bullet as Bullet).damage);
+            }
         });
 
         this.scene!.physics.add.overlap(this._player, this._enemyBullets, (player, bullet) => {
@@ -156,17 +169,33 @@ export default class EntityManager extends Plugins.ScenePlugin {
             return;
         }
 
-        const enemy = this._enemies.get() as Enemy;
-        if (!enemy) {
+        const spawnX = Phaser.Math.Between(64, this.scene!.cameras.main.width - 64);
+        const spawnY = 0;
+
+        const hasSine = this._enemies.getChildren().some(e =>
+            e instanceof SineSpreadEnemy && e.active
+        );
+
+        const now = this.scene!.time.now;
+        const canSpawnSine = now - this._lastSineSpawn > this.SINE_COOLDOWN;
+
+        const wantSine = Phaser.Math.Between(0, 100) < 5;
+
+        if (!hasSine && canSpawnSine && wantSine) {
+            const sine = new SineSpreadEnemy(this.scene!, spawnX, spawnY - 80, "sineSpreadEnemy");
+            this._enemies.add(sine);
+            this._lastSineSpawn = now;
+            this.game!.events.emit(GameConstants.Events.ENEMY_SPAWNED_EVENT, sine);
             return;
         }
 
-        enemy.enable(Phaser.Math.Between(64, this.scene!.cameras.main.width - 64), 0);
+        const enemy = this._enemies.get() as Enemy;
+        if (!enemy) return;
 
+        enemy.enable(spawnX, spawnY);
         this.game!.events.emit(GameConstants.Events.ENEMY_SPAWNED_EVENT, enemy);
-
-        console.log("[EntityManager] Enemy spawned");
     }
+
 
     private spawnHeal() {
         if (this._powerEffects.countActive(true) >= 1) {
